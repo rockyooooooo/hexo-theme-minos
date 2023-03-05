@@ -13,7 +13,7 @@ const MOMENTJS_SUPPORTED_LANGUAGES = ['af', 'ar-dz', 'ar-kw', 'ar-ly', 'ar-ma', 
     'nn', 'pa-in', 'pl', 'pt-br', 'pt', 'ro', 'ru', 'sd', 'se', 'si', 'sk', 'sl', 'sq',
     'sr-cyrl', 'sr', 'ss', 'sv', 'sw', 'ta', 'te', 'tet', 'tg', 'th', 'tl-ph', 'tlh', 'tr',
     'tzl', 'tzm-latn', 'tzm', 'ug-cn', 'uk', 'ur', 'uz-latn', 'uz', 'vi', 'x-pseudo', 'yo',
-    'zh-cn', 'zh-hk', 'zh-tw'];
+    'zh-cn', 'zh-hk', 'zh-TW'];
 
 function getMomentLocale(language) {
     let locale = formatRfc5646(language);
@@ -81,16 +81,30 @@ hexo.extend.helper.register('page_title', function () {
 /**
  * Format date to string without year.
  */
-hexo.extend.helper.register('format_date', injectMomentLocale(function (date) {
-    return moment(date).format('MMM D');
-}));
+hexo.extend.helper.register(
+  "format_date",
+  injectMomentLocale(function (date) {
+    const lang = getPageLanguage(this.page);
+    if (lang === "en") {
+      return moment(date).format("MMM D");
+    }
+    return moment(date).format("MM 月 DD 日");
+  })
+);
 
 /**
  * Format date to string with year.
  */
-hexo.extend.helper.register('format_date_full', injectMomentLocale(function (date) {
-    return moment(date).format('MMM D YYYY');
-}));
+hexo.extend.helper.register(
+  "format_date_full",
+  injectMomentLocale(function (date) {
+    const lang = getPageLanguage(this.page);
+    if (lang === "en") {
+      return moment(date).format("LL");
+    }
+    return moment(date).format("YYYY 年 M 月 D 日");
+  })
+);
 
 /**
  * Get moment.js supported page locale
